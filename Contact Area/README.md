@@ -3,10 +3,10 @@
 In order to measure the Human Cell Contact Area, we followed the following steps
 
 ## 1. Train a Pixel Clasification Machine Learning Model using Labkit Plugin in FIJI
-The investigator anotated one image per experiment using the Labkit drawing tool, setting 2 categories: _cell contact area and background_. A pixel clasification model is then generated and saved.
+The investigator anotated one image per experiment using the Labkit drawing tool, setting 2 categories: _cell contact area and background_. A _pixel clasification model_ is then generated and saved.
 
 ## 2. Segmentation of the dataset 
-The ImageJ macro `2. Apply classifier to folder.ijm` performs segmentation of all images in a folder using a given Labkit classifier. It is applied to every folder of our image dataset and save3 the results for the subsequent steps
+The ImageJ macro `2. Apply classifier to folder.ijm` performs segmentation of all images in a folder using a given Labkit classifier. It is applied to every folder of our image dataset and save3 the results for the subsequent steps.
 
 ## 3. Manual Curation
 The investigator checked manually all the segmented images, correcting segmentation defects manually, via drawing new segmented cells or deleting false positive structures. Although the segmentation was overall accurate and this step was not very time consuming.
