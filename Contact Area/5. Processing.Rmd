@@ -1,0 +1,234 @@
+---
+title: |
+  | [MLII] Ejercicios de Evaluación 
+  | RNAS y RF
+  | Alejandro Campoy López  
+  | alecampoy@protonmail.com 
+  | dni: 48806295L
+output:
+  html_document: default
+  pdf_document: default
+always_allow_html: 'true'
+---
+
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(fig.pos = 'H')
+knitr::opts_chunk$set(echo =TRUE)
+knitr::opts_chunk$set(tidyverse.quiet = TRUE)
+```
+
+
+### Paquetes que vamos a usar en alguno de los ejercicios:
+
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+library("formatR")
+library(vctrs)
+getwd()
+```
+
+# 0. Carga de datos 
+
+
+```{r warning=FALSE, message=FALSE, error=FALSE, results=FALSE}
+options(tidyverse.quiet = TRUE)
+df_elements <- dplyr::tibble()
+for (d in dir('datos experimento 4 sept 2024/Resultados', full.names = TRUE)) {
+  if (dir.exists(d) == TRUE) {
+    for (i in dir(d, pattern = 'result.tif.csv', full.names = TRUE)) {
+      print(i)
+      # genero los detalles del nombre
+      name_file <- str_split(i, '/')[[1]]
+      # fecha <- str_split(name_file[2]
+      muestra <- name_file[3]
+      replica <- str_split(name_file[4], "_")[[1]][2]
+      # genero la condición
+      temp_name <- str_to_lower(name_file[4])
+      if (str_detect(temp_name, 'flna') &
+          str_detect(temp_name, 'sdf')) {
+        condicion <- 'SDF FLNa'
+      }
+      else if (str_detect(temp_name, 'scramble') &
+               str_detect(temp_name, 'sdf')) {
+        condicion <- 'SDF Scramble'
+      }
+      else if (str_detect(temp_name, 'flna') &
+               !str_detect(temp_name, 'sdf')) {
+        condicion <- 'FLNa'
+      }
+      else if (str_detect(temp_name, 'scramble') &
+               !str_detect(temp_name, 'sdf')) {
+        condicion <- 'Scramble'
+      }
+      # cargo el fichero y añado las condiciones
+      df_temp <-
+        read_csv(i, show_col_types = FALSE) %>% select(
+          -...1,
+          -X,
+          -Y,
+          -Major,
+          -Minor,
+          -Angle,
+          -`%Area`,
+          -Slice,
+          -FeretX,
+          -FeretY,
+          -FeretAngle, 
+          -AR,
+          -`Circ.`
+        )
+      # df_temp$Fecha <- fecha
+      df_temp$Muestra <- muestra
+      df_temp$replica <- replica
+      df_temp$Condicion <- condicion
+      # lo uno al df original
+      df_elements <- bind_rows(df_elements, df_temp)
+    }
+  }
+}
+rm(df_temp)
+# Genero las nuevas columnas de view y tiempo
+df_elements$View <- str_sub(str_extract(df_elements$Label, '_s\\d+'),start = 2)
+df_elements$Time <- str_sub(str_extract(df_elements$Label, '_t\\d+'),start = 2)
+#df_elements$Imagen <- str_remove(df_elements$Label ,'^binaria:.+:')
+df_elements <- df_elements %>% mutate(gruping_aux = paste(Muestra, replica, Condicion, Time, sep = "_"))
+df_elements <- df_elements %>% mutate(gruping_aux_view = paste(Muestra, replica, Condicion, Time, View, sep = "_"))
+write_csv(df_elements, 'datos experimento 4 sept 2024/dataset_cells_experimento4.csv')
+
+```
+
+```{r}
+hist(df_elements$Area)
+```
+
+
+# 1. Carga del otro dataset
+
+Las fotos anotadas como borroso aparecen como NA
+```{r}
+# No disponemos del conteo manual de las celulas por imagen
+# df_n_Cell_manual_counted <- read_csv('Datos/n_Cell_auto_completo.csv', col_types = c('ffffiiiii')) %>% pivot_longer(cols = starts_with('t'), names_to = 'Time', values_to = "n_Cell_manual_counted") %>% drop_na()
+```
+
+# 2. Agrupamiento de la información de las celulas por imagen para normalizar
+
+```{r}
+df_imagenes <-
+  df_elements %>% filter(Area > 0) %>% group_by(gruping_aux) %>%
+  summarise(
+    # Fecha = first(Fecha),
+    Muestra = first(Muestra),
+    Condicion = first(Condicion),
+    View = first(View),
+    Time = first(Time),
+    n_Cell_auto = n(),
+    Area_mean = mean(Area, na.rm = TRUE),
+    Area_median = median(Area, na.rm = TRUE),
+    Area_suma = sum(Area, na.rm = TRUE),
+    Area_std = sd(Area, na.rm = TRUE),
+    Area_rel_std = 100 * sd(Area, na.rm = TRUE) / mean(Area, na.rm = TRUE),
+    Area_max = max(Area, na.rm = TRUE),
+    Area_IQR = IQR(Area, na.rm = TRUE),
+    n_outliers = sum(Area > (median(Area) + 1.5 * IQR(Area)) |
+                       Area < (median(Area) - 1.5 * IQR(Area))),
+    Solidity_mean =  mean(Solidity, na.rm = TRUE),
+    Roundness_mean = mean(Round, na.rm = TRUE),
+    Feret_mean =  mean(Feret, na.rm = TRUE),
+    MinFeret = mean(MinFeret, na.rn = TRUE),
+    Feret_ratio_mean = mean(MinFeret / Feret, na.rm = TRUE)
+  ) %>%
+  mutate(n_Cell_no_outliers = (n_Cell_auto - n_outliers))
+
+write_csv(df_imagenes, 'datos experimento 4 sept 2024/dataset_experimento4_grouped.csv')
+```
+
+# 3. Union de ambos DF (no aplica ya que no tengo el archivo de conteo manual de celulas)
+
+Genero una variable que contenga todas las categorias para unir por ahi
+
+```{r}
+# df_imagenes <- df_imagenes %>% mutate(gruping_aux = paste(Fecha, Muestra, Condicion, View, Time, sep = "_"))
+# No disponemos del conteo manual de las celulas por imagen
+# df_n_Cell_manual_counted <- df_n_Cell_manual_counted %>% mutate(gruping_aux = paste(Fecha, Muestra, Condicion, View, Time, sep = "_"))
+```
+
+Realizo la union como *inner_join* para quedarme solo con las que tengan información
+
+```{r}
+# No disponemos del conteo manual de las celulas por imagen
+# df_imagenes <- inner_join(df_imagenes, df_n_Cell_manual_counted %>% select(n_Cell_manual_counted, gruping_aux), by='gruping_aux')
+```
+
+Ahora puedo generar el area normalizada, aunque no creo que sea necesario
+
+```{r}
+# No disponemos del conteo manual de las celulas por imagen
+# df_imagenes$Area_norm <- df_imagenes$Area_suma / df_imagenes$n_Cell_manual_counted
+df_imagenes$Area_norm_noOutLiers <- df_imagenes$Area_suma / df_imagenes$n_Cell_no_outliers
+```
+
+
+# 4. Gráfico 
+
+- Primero genero la variable a representar y los factores ordenados
+
+Hay que cambiar los datos a los tiempos correctos que me enviaron por correo
+```{r}
+unique(df_imagenes$Time)
+df_imagenes$Time[df_imagenes$Time == "t3"] <- "0 min"
+df_imagenes$Time[df_imagenes$Time == "t13"] <- "5 min"
+df_imagenes$Time[df_imagenes$Time == "t14"] <- "5 min"
+df_imagenes$Time[df_imagenes$Time == "t35"] <- "15 min"
+df_imagenes$Time[df_imagenes$Time == "t36"] <- "15 min"
+df_imagenes$Time[df_imagenes$Time == "t40"] <- "15 min"
+df_imagenes$Time[df_imagenes$Time == "t69"] <- "30 min"
+df_imagenes$Time[df_imagenes$Time == "t71"] <- "30 min"
+df_imagenes$Time[df_imagenes$Time == "t79"] <- "30 min"
+df_imagenes$Time[df_imagenes$Time == "t104"] <- "45 min"
+df_imagenes$Time[df_imagenes$Time == "t112"] <- "45 min"
+
+df_elements$Time[df_elements$Time == "t3"] <- "0 min"
+df_elements$Time[df_elements$Time == "t13"] <- "5 min"
+df_elements$Time[df_elements$Time == "t14"] <- "5 min"
+df_elements$Time[df_elements$Time == "t35"] <- "15 min"
+df_elements$Time[df_elements$Time == "t36"] <- "15 min"
+df_elements$Time[df_elements$Time == "t40"] <- "15 min"
+df_elements$Time[df_elements$Time == "t69"] <- "30 min"
+df_elements$Time[df_elements$Time == "t71"] <- "30 min"
+df_elements$Time[df_elements$Time == "t79"] <- "30 min"
+df_elements$Time[df_elements$Time == "t104"] <- "45 min"
+df_elements$Time[df_elements$Time == "t112"] <- "45 min"
+unique(df_imagenes$Time)
+```
+
+Odenación del dataset por condición y luego tiempo
+
+```{r}
+df_imagenes$Time <- factor(df_imagenes$Time, levels = c("0 min","5 min", "15 min", "30 min", "45 min"), ordered = TRUE)
+df_elements$Time <- factor(df_elements$Time, levels = c("0 min","5 min", "15 min", "30 min", "45 min"), ordered = TRUE)
+
+df_imagenes <- df_imagenes %>% arrange(Condicion, Time, View)
+df_elements <- df_elements %>% arrange(Condicion, Time, View)
+
+write_csv(df_imagenes, 'datos experimento 2/dataset_experimento2_perView.csv')
+write_csv(df_elements, 'datos experimento 2/dataset_cells_experimento2_ordenado.csv')
+```
+
+## Plot por imagen
+
+
+```{r, fig.width=6, warning=FALSE}
+df_imagenes %>% ggplot(aes(x=Time, y=Area_mean, fill=factor(Condicion))) + geom_boxplot(outlier.size = 0.5) + geom_point(aes(fill = factor(Condicion)), size = 2, shape = 21, position = position_jitterdodge()) 
+```
+
+```{r, fig.width=6, warning=FALSE}
+df_imagenes %>% ggplot(aes(x=Time, y=Area_norm_noOutLiers, fill=factor(Condicion))) + geom_boxplot(outlier.size = 0.5) + geom_point(aes(fill = factor(Condicion)), size = 2, shape = 21, position = position_jitterdodge()) + scale_y_continuous(limits = c(0, 175)) 
+```
+
+## Plot por elementos
+
+```{r, fig.width=7, warning=FALSE}
+df_elements %>% filter(Area > 0.2) %>%
+  ggplot(aes(x=Time, y=Area, fill=factor(Condicion))) + geom_boxplot(outlier.size = 0.5) + scale_y_continuous(limits = c(0, 500)) + ggtitle("sin agrupar")
+```
