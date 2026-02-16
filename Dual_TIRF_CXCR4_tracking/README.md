@@ -26,28 +26,16 @@ This folder contains the scripts used to analyze CXCR4 and Rab4/Rab11 cellular s
 
 # Scripts Included
 
-1_Cell_segmentation_and_trackings_mac_large_files.py
+-	1_Cell_segmentation_and_trackings_mac_large_files.py - Reads raw data and returns trajectories for CXCR4 and Rab4/Rab11.
 
-Reads raw data and returns trajectories for CXCR4 and Rab4/Rab11.
+-	2_Correlations_and_diffusion_plots.py - Reads CXCR4 and Rab4/Rab11 trajectories and returns analysis on their colocalization and dynamics.
 
-2_Correlations_and_diffusion_plots.py
-
-Reads CXCR4 and Rab4/Rab11 trajectories and returns analysis on their colocalization and dynamics.
-
-3_Merge_csv_files.py
-
-Merges all output csv files for easier use.
+-	3_Merge_csv_files.py - Merges all output csv files for easier use.
 
 
-1_Cell_segmentation_and_trackings_mac_large_files_1channel.py
+-	1_Cell_segmentation_and_trackings_mac_large_files_1channel.py - Reads raw data and returns trajectories for CXCR4.
 
-Reads raw data and returns trajectories for CXCR4.
+-	2_Correlations_and_diffusion_plots_1channel.py - Reads CXCR4 trajectories and returns analysis on their dynamics.
 
-2_Correlations_and_diffusion_plots_1channel.py
-
-Reads CXCR4 trajectories and returns analysis on their dynamics.
-
-3_Merge_csv_files_1channel.py
-
-Merges all output csv files for easier use.
+-	3_Merge_csv_files_1channel.py - Merges all output csv files for easier use.
 

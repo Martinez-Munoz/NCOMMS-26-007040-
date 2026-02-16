@@ -55,5 +55,6 @@ This folder contains the scripts used to analyze CXCR4 and β1 integrin single-m
 
 **Output**
 
-- TXT files containing all calculated parameters
-- Tables can be used directly for generating figures reported in the manuscript
+- TXT files containing all calculated parameters.
+- Tables can be used directly for generating figures reported in the manuscript.
+- Graphs and statistical analyses were generated using GraphPad Prism 10.
