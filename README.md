@@ -19,7 +19,7 @@ The repository is organized into three independent analysis pipelines correspond
 	-	Diffusion coefficients calculation
 	-	Trajectory type classification
 	-	Spot intensity quantification  
-	These analyses are described in: [JoVe Protocol, Sorzano COS and Martínez-Muñoz L et al, 2019] (https://www.jove.com/video/59314) (DOI:10.3791/59314)
+	  These analyses are described in: [JoVe Protocol, Sorzano COS and Martínez-Muñoz L et al, 2019] (https://www.jove.com/video/59314) (DOI:10.3791/59314)
 - This approach was previously applied in: [Molecular Cell, Martínez-Muñoz L. et al, 2018] (https://doi.org/10.1016/j.molcel.2018.02.034) 
 - Scripts are included here for convenience to allow reviewers to reproduce the results.
 
