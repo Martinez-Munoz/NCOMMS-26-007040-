@@ -16,7 +16,7 @@ This folder contains the scripts used to analyze CXCR4 and Rab4/Rab11 cellular s
    - In the case of 2-color data, classified as Rab4/Rab11 positive or negative.
 - Individual trajectories were characterized by computing:
    - Instantaneous diffusion coefficient (D1-4).
-   - Anomalous exponent (a)
+   - Anomalous exponent (alpha)
    - Total travelled distance
 
 # # 3. Data export
