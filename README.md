@@ -1,16 +1,16 @@
-Description
+# Description
 
 This repository contains the analysis code used in the manuscript entitled "Mechano-chemosensitive regulation of T cell migration by Filamin A via CXCR4 and β1 integrin dynamic remodeling", submitted to Nature Communications.
 
 The repository is organized into three independent analysis pipelines corresponding to the different experimental approaches described in the study.
 
-Analysis Pipelines
+# Analysis Pipelines
 
-1. T cell contact area quantification (folder: T_cell_contact_area)
-	Image processing and quantification of T cell contact area measurements.
-	Scripts include segmentation and quantification of binary images. 
-	Quantitative measurements were exported as CSV files for downstream statistical analysis. 
-	Graphs and statistical analyses were generated using GraphPad Prism.
+## 1. T cell contact area quantification (folder: T_cell_contact_area)
+- Image processing and quantification of T cell contact area measurements.
+- Scripts include segmentation and quantification of binary images. 
+- Quantitative measurements were exported as CSV files for downstream statistical analysis. 
+- Graphs and statistical analyses were generated using GraphPad Prism.
 
 2. Single-molecule TIRF analysis (folder: Single_molecule_TIRF)
 	Analysis of CXCR4 and β1 integrin single-molecule dynamics.
@@ -36,20 +36,20 @@ Each analysis folder contains:
 - Documentation explaining the workflow.
 - Information about generated output files.
 
-Software Environment
+# Software Environment
 
 - MATLAB R2021a
 - Python 3.8.13
 - ImageJ2 (version 2.16.0/1.54p)
 - GraphPad Prism 10 (used for final figure generation)
 
-Reproducibility
+# Reproducibility
 
 All scripts required to generate the quantitative data are included.
 The scripts generate txt, CSV or Excel tables used for statistical analysis and final figure preparation.
 Final figure formatting was performed in GraphPad Prism 10.
 
-Figure Correspondence
+# Figure Correspondence
 
 	T cell contact area: Figure 3D-G
 	Single-molecule TIRF: Figures 1C-F, 2, 4 and 7; Supplementary Figures 9 and 10.
