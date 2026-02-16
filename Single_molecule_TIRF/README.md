@@ -1,15 +1,15 @@
-#Single_molecule_TIRF
+# Single_molecule_TIRF
 
 This folder contains the scripts used to analyze CXCR4 and β1 integrin single-molecule dynamics and organization in T cells.
 
-##Single-molecule TIRF Workflow Summary
+## Single-molecule TIRF Workflow Summary
 
-##1. Particle detection and tracking
+## 1. Particle detection and tracking
 - Performed using U-Track2 (MATLAB).
 - Tracks were manually verified frame by frame to ensure correct identification.
 - Particles incorrectly detected by U-Track2 were that were manually annotated. 
 
-##2. Custom MATLAB analyses on U-Track2 trajectories.
+## 2. Custom MATLAB analyses on U-Track2 trajectories.
 - Trajectories corresponding to incorrectly identified spots were first exlcuded (manually verified).
   - Custom MATLAB scripts were used to extract the X-Y coordinates of each spot along its trajectory.
 - From these coordinates, the following parameters were calculated:
@@ -18,11 +18,11 @@ This folder contains the scripts used to analyze CXCR4 and β1 integrin single-m
    - Spot intensity along each trajectory.
 - These analyses were first described in: [JoVe Protocol, Sorzano COS and Martínez-Muñoz L et al, 2019] (https://www.jove.com/video/59314) (DOI:10.3791/59314)
 
-##3. Data export
+##  3. Data export
    - Quantitative measurements are exported as TXT files for downstream statistical analysis.
    - Graphs and statistical analyses were generated using GraphPad Prism 10.
 
-##Scripts Included
+## Scripts Included
 
 readTrajectories.m - Reads U-Track2 output and extracts spot trajectories
 separateTrajectoriesByLength.m - Splits trajectories based on their length
