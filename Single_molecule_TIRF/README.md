@@ -24,13 +24,13 @@ This folder contains the scripts used to analyze CXCR4 and β1 integrin single-m
 
 ## Scripts Included
 
-readTrajectories.m - Reads U-Track2 output and extracts spot trajectories
-separateTrajectoriesByLength.m - Splits trajectories based on their length
-AnalyzeSpotIntensities.m - Calculates spot intensities along trajectories
-gatherDiffusionAndIntensity.m - Combines diffusion coefficients and intensities into a summary table
-gatherTrajectoryClassificationAndIntensity.m - Combines trajectory type classifications and spot intensities
+-	readTrajectories.m - Reads U-Track2 output and extracts spot trajectories
+-	separateTrajectoriesByLength.m - Splits trajectories based on their length
+-	AnalyzeSpotIntensities.m - Calculates spot intensities along trajectories
+-	gatherDiffusionAndIntensity.m - Combines diffusion coefficients and intensities into a summary table
+-	gatherTrajectoryClassificationAndIntensity.m - Combines trajectory type classifications and spot intensities
 
-DiffusionScripts/  Contains additional MATLAB scripts to calculate diffusion coefficients for all trajectories
+**DiffusionScripts/  Contains additional MATLAB scripts to calculate diffusion coefficients for all trajectories**
 
 -	calculateDiffusion.m
 -	FitFunctionGJB10a.m
@@ -43,7 +43,7 @@ DiffusionScripts/  Contains additional MATLAB scripts to calculate diffusion coe
 -	MeanMSDanalysisGJB18.m
 -	msddGJB20.m
 
-MomentScalingSpectrum/ Contains MATLAB scripts to perform MSS analysis and classify trajectories
+**MomentScalingSpectrum/ Contains MATLAB scripts to perform MSS analysis and classify trajectories**
 
 -	AnalyseAllFilesGJB20_MAIN_MSS.m
 -	classifyLongTrajectories.m
